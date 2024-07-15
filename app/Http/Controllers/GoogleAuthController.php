@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use League\OAuth1\Client\Credentials\Credentials;
 
 class GoogleAuthController extends Controller
 {
@@ -23,11 +24,11 @@ class GoogleAuthController extends Controller
                     'email' => $google_user->getEmail(),
                     'google_id' => $google_user->getId(),
                 ]);
-
-                return redirect()->route("dashboard", ["user_id" => $new_user->id]);
+                Auth::login($new_user);
             } else{
-                return redirect()->route("dashboard", ["user_id" => $user->id]);
+                Auth::login($user);
             }
+            return redirect()->route("dashboard");
             
 
         } catch(\Exception $e) {
@@ -35,9 +36,14 @@ class GoogleAuthController extends Controller
         }
     }
 
-    public function dashboard($user_id){
-        $user = User::find($user_id);
+    public function dashboard(){
+        $user = User::find(auth()->user()->id);
 
         return view("dashboard", compact("user"));
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect()->route("login");
     }
 }

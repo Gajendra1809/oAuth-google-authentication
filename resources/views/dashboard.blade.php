@@ -11,5 +11,7 @@
     <h4>User details :-</h4>
     <p>Name : {{ $user->name }}</p>
     <p>Email : {{ $user->email }}</p>
+<p>{{auth()->user()->name}}</p>
+    <button><a href="{{route('logout')}}">Logout</a></button>
 </body>
 </html>

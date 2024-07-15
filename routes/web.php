@@ -14,11 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-});
+Route::view('/', 'login')->name('login');
+Route::get('/logout', [GoogleAuthController::class,'logout'])->name('logout');
 
 Route::get('auth/google',[GoogleAuthController::class,'redirect'])->name('google.auth');
 Route::get('auth/google/call-back',[GoogleAuthController::class,'callbackGoogle']);
 
-Route::get('/dashboard/{user_id}', [GoogleAuthController::class,'dashboard'])->name('dashboard');
+Route::get('/dashboard', [GoogleAuthController::class,'dashboard'])->middleware('auth')->name('dashboard');
